@@ -128,11 +128,17 @@ function TestListView:__new()
 			--	ListFrame.Selected = true
 			--end
 			
-			--Connect the double click.
-			ListFrame.DoubleClicked:Connect(function()
+			ListFrame.Clicked:Connect(function()
 				self.TestOutputOpened:Fire(ListFrame.Test)
 				CurrentOutputTest = FullName
 			end)
+
+			ListFrame.DoubleClicked:Connect(function()
+				if ListFrame.Test.ModuleScript then
+					self.Plugin:OpenScript(ListFrame.Test.ModuleScript)
+				end
+			end)
+
 			
 			--Connect selecting the list frame.
 			ListFrame:GetPropertyChangedSignal("Selected"):Connect(function()
