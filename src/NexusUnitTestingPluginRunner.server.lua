@@ -17,7 +17,7 @@ local OutputView = OutputWindow.new()
 local TestsLists = TestListWindow.new(OutputView)
 
 --Create the button.
-local NexusWidgetsToolbar = NexusPluginFramework.new("PluginToolbar","Nexus Widgets")
+local NexusWidgetsToolbar = NexusPluginFramework.new("PluginToolbar", "Nexus Async")
 local NexusUnitTestingButton = PluginToggleButton.new(NexusWidgetsToolbar,"Unit Tests","Opens the Nexus Unit Testing window","http://www.roblox.com/asset/?id=4734891702",TestsLists)
 NexusUnitTestingButton.ClickableWhenViewportHidden = true
 
