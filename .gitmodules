@@ -4,7 +4,6 @@
 [submodule "module/Nexus-Unit-Testing"]
 	path = module/Nexus-Unit-Testing
 	url = https://github.com/chess123mate/Nexus-Unit-Testing.git
-	branch = async-subtests
 [submodule "module/Nexus-Project"]
 	path = module/Nexus-Project
 	url = https://github.com/TheNexusAvenger/Nexus-Project.git
