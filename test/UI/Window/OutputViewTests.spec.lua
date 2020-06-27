@@ -12,6 +12,7 @@ local UnitTestClass = NexusUnitTestingPlugin:GetResource("NexusUnitTestingModule
 
 local OutputViewUnitTest = NexusUnitTesting.UnitTest:Extend()
 
+local LINE_HEIGHT_PIXELS = OutputView.LINE_HEIGHT_PIXELS
 
 
 --[[
@@ -88,20 +89,20 @@ NexusUnitTesting:RegisterUnitTest(OutputViewUnitTest.new("IsScrollBarAtBottom"):
 	self:AssertFalse(self.CuT:IsScrollBarAtBottom())
 	
 	--Scroll the frame to the bottom and assert it is at the bottom.
-	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,((4 * 17) + 16) - 60)
+	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,((4 * LINE_HEIGHT_PIXELS) + 16) - 60)
 	self:AssertTrue(self.CuT:IsScrollBarAtBottom())
 	
 	--Reduce the max length and assert the scroll bar position changed.
 	self.CuT.MaxLineWidth = 50
 	self.CuT:UpdateScrollBarSizes()
 	self:AssertTrue(self.CuT:IsScrollBarAtBottom())
-	self:AssertEquals(self.CuT.ScrollingFrame.CanvasPosition.Y,(4 * 17) - 60,"Scroll bar wasn't changed.")
+	self:AssertEquals(self.CuT.ScrollingFrame.CanvasPosition.Y,(4 * LINE_HEIGHT_PIXELS) - 60,"Scroll bar wasn't changed.")
 	
 	--Increaase the max length and assert the scroll bar position changed.
 	self.CuT.MaxLineWidth = 250
 	self.CuT:UpdateScrollBarSizes()
 	self:AssertTrue(self.CuT:IsScrollBarAtBottom())
-	self:AssertEquals(self.CuT.ScrollingFrame.CanvasPosition.Y,((4 * 17) + 16) - 60,"Scroll bar wasn't changed.")
+	self:AssertEquals(self.CuT.ScrollingFrame.CanvasPosition.Y,((4 * LINE_HEIGHT_PIXELS) + 16) - 60,"Scroll bar wasn't changed.")
 end))
 
 --[[
@@ -119,35 +120,35 @@ NexusUnitTesting:RegisterUnitTest(OutputViewUnitTest.new("UpdateScrollBarSizes")
 	self.CuT.MaxLineWidth = 250
 	self.CuT:UpdateScrollBarSizes()
 	self:AssertEquals(self.CuT.ScrollingFrame.CanvasSize,UDim2.new(0,250,0,34),"Canvas size is incorrect.")
-	self:AssertEquals(self.CuT.OutputClips.Size,UDim2.new(1,0,1,-(17 + 22)),"Clips size is incorrect.")
+	self:AssertEquals(self.CuT.OutputClips.Size,UDim2.new(1,0,1,-(LINE_HEIGHT_PIXELS + 22)),"Clips size is incorrect.")
 end))
 
 --[[
-Tests the UpdateContainerPoisiton method.
+Tests the UpdateContainerPosition method.
 --]]
-NexusUnitTesting:RegisterUnitTest(OutputViewUnitTest.new("UpdateContainerPoisiton"):SetRun(function(self)
+NexusUnitTesting:RegisterUnitTest(OutputViewUnitTest.new("UpdateContainerPosition"):SetRun(function(self)
 	--Set the output below the height and assert the position is correct.
 	self.CuT.OutputLines = {{"String 1"},{"String 2"}}
 	self.CuT.MaxLineWidth = 50
 	self.CuT:UpdateScrollBarSizes()
-	self.CuT:UpdateContainerPoisiton()
+	self.CuT:UpdateContainerPosition()
 	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,0),"Position is incorrect.")
 	
 	--Set the output above the height and assert the position is correct.
 	self.CuT.OutputLines = {{"String 1"},{"String 2"},{"String 3"},{"String 4"},{"String 5"},{"String 6"}}
 	self.CuT:UpdateScrollBarSizes()
-	self.CuT:UpdateContainerPoisiton()
+	self.CuT:UpdateContainerPosition()
 	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,0),"Position is incorrect.")
 	
 	--Set the scroll bar position to the middle and assert the position is unchaged.
 	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,10)
-	self.CuT:UpdateContainerPoisiton()
+	self.CuT:UpdateContainerPosition()
 	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,0),"Position is incorrect.")
 	
 	--Set the scroll bar position to the bottom and assert the position is unchaged.
-	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,(6 * 17) - 50)
-	self.CuT:UpdateContainerPoisiton()
-	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,-1),"Position is incorrect.")
+	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,(6 * LINE_HEIGHT_PIXELS) - 50)
+	self.CuT:UpdateContainerPosition()
+	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,0),"Position is incorrect.")
 end))
 
 --[[
@@ -209,7 +210,7 @@ NexusUnitTesting:RegisterUnitTest(OutputViewUnitTest.new("UpdateDisplayedOutput"
 	self:AssertEquals(self.CuT.OutputLabels[3].TextColor3,"InfoText","Text color is incorrect.")
 	
 	--Set the canvas position to the bottom and assert that the correct lines show.
-	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,(17 * 5) - 50)
+	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,(LINE_HEIGHT_PIXELS * 5) - 50)
 	self.CuT.OutputLines = {{"String 1",Enum.MessageType.MessageOutput},{"String 2",Enum.MessageType.MessageWarning},{"String 3",Enum.MessageType.MessageError},{"String 4",Enum.MessageType.MessageInfo},{"String 5",Enum.MessageType.MessageInfo}}
 	self.CuT:UpdateScrollBarSizes()
 	self.CuT:UpdateDisplayedOutput()

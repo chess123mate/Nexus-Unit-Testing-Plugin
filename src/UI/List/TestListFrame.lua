@@ -57,7 +57,7 @@ function TestListFrame:__new(Test)
 	UIListLayout.Parent = self:GetCollapsableContainer()
 	
 	--Add the existing subtests.
-	for _,SubTest in pairs(Test.SubTests) do
+	for _,SubTest in ipairs(Test.SubTests) do
 		local NewListFrame = TestListFrame.new(SubTest)
 		NewListFrame.Parent = self:GetCollapsableContainer()
 	end

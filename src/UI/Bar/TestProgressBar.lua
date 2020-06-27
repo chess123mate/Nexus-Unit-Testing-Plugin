@@ -91,7 +91,7 @@ Updates the progress bar.
 function TestProgressBar:UpdateProgressBar()
 	--Determinee the amount of each type.
 	local TotalTests,InProgressTests,PassedTests,FailedTests,SkippedTests = 0,0,0,0,0
-	for _,Test in pairs(self.Tests) do
+	for _,Test in ipairs(self.Tests) do
 		TotalTests = TotalTests + 1
 		
 		if Test.State == NexusUnitTesting.TestState.Passed then
@@ -168,7 +168,7 @@ function TestProgressBar:AddUnitTest(UnitTest,DontUpdateBar)
 	end))
 	
 	--Add the subtests.
-	for _,SubUnitTest in pairs(UnitTest.SubTests) do
+	for _,SubUnitTest in ipairs(UnitTest.SubTests) do
 		self:AddUnitTest(SubUnitTest,true)
 	end
 	
@@ -183,7 +183,7 @@ Removes a unit test to track.
 --]]
 function TestProgressBar:RemoveUnitTest(UnitTest,DontUpdateBar)
 	--Remove the unit test.
-	for i,Test in pairs(self.Tests) do
+	for i,Test in ipairs(self.Tests) do
 		if Test == UnitTest then
 			table.remove(self.Tests,i)
 			break
@@ -191,12 +191,12 @@ function TestProgressBar:RemoveUnitTest(UnitTest,DontUpdateBar)
 	end
 	
 	--Disconnect the events.
-	for _,Connection in pairs(self.TestEvents[UnitTest] or {}) do
+	for _,Connection in ipairs(self.TestEvents[UnitTest] or {}) do
 		Connection:Disconnect()
 	end
 	
 	--Remove the subtests.
-	for _,SubUnitTest in pairs(UnitTest.SubTests) do
+	for _,SubUnitTest in ipairs(UnitTest.SubTests) do
 		self:RemoveUnitTest(SubUnitTest,true)
 	end
 	

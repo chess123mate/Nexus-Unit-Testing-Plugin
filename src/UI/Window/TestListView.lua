@@ -174,8 +174,8 @@ function TestListView:RunAllTests()
 	--Find the tests to run.
 	local Tests = {}
 	local Modules = {}
-	for _,Service in pairs(SERVICES_WITH_TESTS) do
-		for _,Test in pairs(TestFinder.GetTests(Service)) do
+	for _,Service in ipairs(SERVICES_WITH_TESTS) do
+		for _,Test in ipairs(TestFinder.GetTests(Service)) do
 			table.insert(Tests,Test)
 			Test.Overrides["plugin"] = self.Plugin
 			Modules[Test.ModuleScript] = true
@@ -184,7 +184,7 @@ function TestListView:RunAllTests()
 	
 	--Remove the non-existent tests.
 	local FramesToRemove = {}
-	for Index,Frame in pairs(self.ModuleScriptTestFrames) do
+	for Index,Frame in ipairs(self.ModuleScriptTestFrames) do
 		local Test = Frame.Test
 		if not Modules[Test.ModuleScript] then
 			local ExistingListFrame = self.ModuleScriptTestFrames[Test.ModuleScript]
@@ -193,7 +193,7 @@ function TestListView:RunAllTests()
 			end
 		end
 	end
-	for Index,Frame in pairs(FramesToRemove) do
+	for Index,Frame in ipairs(FramesToRemove) do
 		self.TestProgressBar:RemoveUnitTest(Frame.Test,true)
 		Frame:Destroy()
 		self.ModuleScriptTestFrames[Index] = nil
@@ -224,7 +224,7 @@ function TestListView:RunFailedTests()
 		end
 		
 		--Return if a subtest has a failure.
-		for _,SubTest in pairs(Test.SubTests) do
+		for _,SubTest in ipairs(Test.SubTests) do
 			if ContainsFailedTest(SubTest) then
 				return true
 			end
@@ -237,7 +237,7 @@ function TestListView:RunFailedTests()
 	--Determine the ModuleScripts to rerun.
 	local TestsToRerun = {}
 	local FramesToRemove = {}
-	for Index,Frame in pairs(self.ModuleScriptTestFrames) do
+	for Index,Frame in ipairs(self.ModuleScriptTestFrames) do
 		local Test = Frame.Test
 		if ContainsFailedTest(Test) then
 			local ModuleScript = Test.ModuleScript
@@ -250,7 +250,7 @@ function TestListView:RunFailedTests()
 	end
 	
 	--Remove the non-existent tests.
-	for Index,Frame in pairs(FramesToRemove) do
+	for Index,Frame in ipairs(FramesToRemove) do
 		self.TestProgressBar:RemoveUnitTest(Frame.Test,true)
 		Frame:Destroy()
 		self.ModuleScriptTestFrames[Index] = nil
@@ -275,7 +275,7 @@ function TestListView:RunSelectedTests()
 		end
 		
 		--Return true if a subtest is selected.
-		for _,TestListFrame in pairs(ListFrame:GetCollapsableContainer():GetChildren()) do
+		for _,TestListFrame in ipairs(ListFrame:GetCollapsableContainer():GetChildren()) do
 			if ListFrameIsSelected(TestListFrame) then
 				return true
 			end
@@ -288,7 +288,7 @@ function TestListView:RunSelectedTests()
 	--Determine the tests to rerun and the frames to remove.
 	local FramesToRemove = {}
 	local TestsToRerun = {}
-	for Index,ListFrame in pairs(self.ModuleScriptTestFrames) do
+	for Index,ListFrame in ipairs(self.ModuleScriptTestFrames) do
 		--Add the test to be removed if the module was removed.
 		if ListFrameIsSelected(ListFrame) then
 			local ModuleScript = ListFrame.Test.ModuleScript
@@ -307,7 +307,7 @@ function TestListView:RunSelectedTests()
 	end
 	
 	--Remove the non-existent tests.
-	for Index,Frame in pairs(FramesToRemove) do
+	for Index,Frame in ipairs(FramesToRemove) do
 		self.TestProgressBar:RemoveUnitTest(Frame.Test,true)
 		Frame:Destroy()
 		self.ModuleScriptTestFrames[Index] = nil
@@ -330,7 +330,7 @@ function TestListView:RunTests(Tests)
 	end)
 	
 	--Register and run the tests.
-	for _,Test in pairs(Tests) do
+	for _,Test in ipairs(Tests) do
 		coroutine.wrap(function()
 			self:RegisterTest(Test)
 			Test:RunTest()

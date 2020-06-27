@@ -24,6 +24,8 @@ local OutputView = NexusUnitTestingPluginProject:GetResource("NexusPluginFramewo
 OutputView:SetClassName("OutputView")
 
 
+OutputView.LINE_HEIGHT_PIXELS = LINE_HEIGHT_PIXELS
+
 
 --[[
 Creates a Output View frame object.
@@ -97,11 +99,11 @@ function OutputView:__new()
 	--Connect the events.
 	ScrollingFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
 		self:UpdateTotalLabels()
-		self:UpdateContainerPoisiton()
+		self:UpdateContainerPosition()
 		self:UpdateDisplayedOutput()
 	end)
 	ScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
-		self:UpdateContainerPoisiton()
+		self:UpdateContainerPosition()
 		self:UpdateDisplayedOutput()
 	end)
 	
@@ -180,9 +182,9 @@ end
 Updates the position of the output
 container.
 --]]
-function OutputView:UpdateContainerPoisiton()
+function OutputView:UpdateContainerPosition()
 	if self:IsScrollBarAtBottom() then
-		self.OutputContainer.Position = UDim2.new(0,-self.ScrollingFrame.CanvasPosition.X,0,-((math.ceil(self.ScrollingFrame.AbsoluteWindowSize.Y/LINE_HEIGHT_PIXELS) * LINE_HEIGHT_PIXELS) - self.ScrollingFrame.AbsoluteWindowSize.Y))
+		self.OutputContainer.Position = UDim2.new(0,-self.ScrollingFrame.CanvasPosition.X,0,math.max(0, -((math.ceil(self.ScrollingFrame.AbsoluteWindowSize.Y/LINE_HEIGHT_PIXELS) * LINE_HEIGHT_PIXELS) - self.ScrollingFrame.AbsoluteWindowSize.Y)))
 	else
 		self.OutputContainer.Position = UDim2.new(0,-self.ScrollingFrame.CanvasPosition.X,0,0)
 	end
@@ -216,7 +218,7 @@ Processes a new output entry.
 function OutputView:ProcessOutput(String,Type)
 	--If the string has multiple lines, split the string and add them.
 	if string.find(String,"\n") then
-		for _,SubString in pairs(string.split(String,"\n")) do
+		for _,SubString in ipairs(string.split(String,"\n")) do
 			self:AddOutput(SubString,Type)
 		end
 		return
@@ -250,7 +252,7 @@ function OutputView:AddOutput(String,Type)
 	
 	--Update the output view.
 	self:UpdateScrollBarSizes(IsAtBottom)
-	self:UpdateContainerPoisiton()
+	self:UpdateContainerPosition()
 	self:UpdateDisplayedOutput()
 end
 
@@ -272,20 +274,20 @@ function OutputView:SetTest(Test)
 	self.MaxLineWidth = 0
 	
 	--Disconnect the existing events.
-	for _,Event in pairs(self.TestEvents) do
+	for _,Event in ipairs(self.TestEvents) do
 		Event:Disconnect()
 	end
 	self.TestEvents = {}
 	
 	--Add the existing output.
-	for _,Output in pairs(Test.Output) do
+	for _,Output in ipairs(Test.Output) do
 		self:ProcessOutput(Output[1],Output[2])
 	end
 	
 	--Update the displayed output if it wasn't done so already.
 	self:UpdateTotalLabels()
 	self:UpdateScrollBarSizes()
-	self:UpdateContainerPoisiton()
+	self:UpdateContainerPosition()
 	self:UpdateDisplayedOutput()
 	if self.MaxLineWidth > self.OutputClips.AbsoluteSize.X then
 		self.ScrollingFrame.CanvasPosition = Vector2.new(self.ScrollingFrame.CanvasPosition.X,(#self.OutputLines * LINE_HEIGHT_PIXELS) - self.OutputClips.AbsoluteSize.Y + 16)
