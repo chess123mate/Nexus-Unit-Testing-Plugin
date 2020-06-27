@@ -184,7 +184,7 @@ container.
 --]]
 function OutputView:UpdateContainerPosition()
 	if self:IsScrollBarAtBottom() then
-		self.OutputContainer.Position = UDim2.new(0,-self.ScrollingFrame.CanvasPosition.X,0,math.max(0, -((math.ceil(self.ScrollingFrame.AbsoluteWindowSize.Y/LINE_HEIGHT_PIXELS) * LINE_HEIGHT_PIXELS) - self.ScrollingFrame.AbsoluteWindowSize.Y)))
+		self.OutputContainer.Position = UDim2.new(0,-self.ScrollingFrame.CanvasPosition.X,0,math.max(LINE_HEIGHT_PIXELS, -((math.ceil(self.ScrollingFrame.AbsoluteWindowSize.Y/LINE_HEIGHT_PIXELS) * LINE_HEIGHT_PIXELS) - self.ScrollingFrame.AbsoluteWindowSize.Y)))
 	else
 		self.OutputContainer.Position = UDim2.new(0,-self.ScrollingFrame.CanvasPosition.X,0,0)
 	end

@@ -148,7 +148,7 @@ NexusUnitTesting:RegisterUnitTest(OutputViewUnitTest.new("UpdateContainerPositio
 	--Set the scroll bar position to the bottom and assert the position is unchaged.
 	self.CuT.ScrollingFrame.CanvasPosition = Vector2.new(0,(6 * LINE_HEIGHT_PIXELS) - 50)
 	self.CuT:UpdateContainerPosition()
-	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,0),"Position is incorrect.")
+	self:AssertEquals(self.CuT.OutputContainer.Position,UDim2.new(0,0,0,LINE_HEIGHT_PIXELS),"Position is incorrect.")
 end))
 
 --[[
